@@ -1443,8 +1443,7 @@ local function draw_ab_loop_range(element, elem_ass)
     local slider_lo = element.layout.slider
     local elem_geo = element.layout.geometry
     local ax = get_slider_ele_pos_for(element, ab_a / state.duration * 100)
-    local bx = (ab_b and ab_b > ab_a and ab_b <= state.duration) and get_slider_ele_pos_for(element, ab_b / state.duration * 100) or elem_geo.w
-    if ax >= bx then return end
+    local bx = (ab_b and ab_b <= state.duration) and get_slider_ele_pos_for(element, ab_b / state.duration * 100) or elem_geo.w
     begin_draw_layer(element, elem_ass, user_opts.ab_loop_color)
     elem_ass:rect_cw(ax, slider_lo.gap, bx, elem_geo.h - slider_lo.gap)
 end
@@ -4228,6 +4227,8 @@ observe_cached("eof-reached", request_tick)
 observe_cached("ontop", request_init)
 observe_cached("speed", request_tick)
 observe_cached("chapter", request_tick)
+mp.observe_property("ab-loop-a", "number", request_tick)
+mp.observe_property("ab-loop-b", "number", request_tick)
 -- ensure compatibility with auto loop scripts
 mp.observe_property("loop-file", "bool", function(_, val)
     state.file_loop = (val ~= false)
