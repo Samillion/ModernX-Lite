@@ -1345,7 +1345,8 @@ local function collect_gap_cuts(element)
     local cuts = {}
     if element.slider.markerF then
         for n, marker in ipairs(element.slider.markerF()) do
-            if n > 1 and marker >= element.slider.min.value and marker <= element.slider.max.value then
+            local sk = n > 1 or (n == 1 and marker > 0)
+            if sk and marker >= element.slider.min.value and marker <= element.slider.max.value then
                 cuts[#cuts + 1] = get_slider_ele_pos_for(element, marker)
             end
         end
@@ -1513,7 +1514,8 @@ local function draw_seekbar_nibbles(element, elem_ass)
     -- draw non-current chapter nibbles
     local has_non_current = false
     for n, marker in ipairs(markers) do
-        if n > 1 and (n - 1) ~= current_chapter and marker >= element.slider.min.value and marker <= element.slider.max.value then
+        local sk = n > 1 or (n == 1 and marker > 0)
+        if sk and (n - 1) ~= current_chapter and marker >= element.slider.min.value and marker <= element.slider.max.value then
             if not has_non_current then
                 begin_draw_layer(element, elem_ass, user_opts.nibble_color)
                 has_non_current = true
@@ -1523,7 +1525,7 @@ local function draw_seekbar_nibbles(element, elem_ass)
     end
 
     -- draw current chapter nibble on top
-    if current_chapter > 0 and current_chapter < #markers then
+    if (current_chapter > 0 or (current_chapter == 0 and markers[1] > 0)) and current_chapter < #markers then
         local marker = markers[current_chapter + 1]
         if marker >= element.slider.min.value and marker <= element.slider.max.value then
             begin_draw_layer(element, elem_ass, user_opts.nibble_current_color)
@@ -4227,7 +4229,7 @@ observe_cached("mute", request_tick)
 observe_cached("eof-reached", request_tick)
 observe_cached("ontop", request_init)
 observe_cached("speed", request_tick)
-observe_cached("chapter", request_tick)
+observe_cached("chapter", request_init)
 -- ensure compatibility with auto loop scripts
 mp.observe_property("loop-file", "bool", function(_, val)
     state.file_loop = (val ~= false)
