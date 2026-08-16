@@ -99,6 +99,7 @@ watch-later-options-remove=osd-margin-y
 | Option                     | Value         | Description                                                                                                        |
 | -------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------ |
 | subtitles_button           | yes           | show the subtitles menu button                                                                                     |
+| secondary_subtitles_button | yes           | show the secondary subtitles menu button                                                                           |
 | audio_tracks_button        | yes           | show the audio tracks menu button                                                                                  |
 | jump_buttons               | yes           | show "jump forward/backward 10 seconds" buttons                                                                    |
 | jump_amount                | 10            | change the jump amount in seconds                                                                                  |
@@ -262,6 +263,11 @@ Customize the button function based on mouse actions.
 |                               | sub_track_mbtn_right_command     | `cycle sub`                                  |
 |                               | sub_track_wheel_down_command     | `cycle sub`                                  |
 |                               | sub_track_wheel_up_command       | `cycle sub down`                             |
+| Secondary subtitle button     | secondary_sub_track_mbtn_left_command | `script-binding select/select-secondary-sid` |
+|                               | secondary_sub_track_mbtn_mid_command  | `cycle secondary-sid down`                   |
+|                               | secondary_sub_track_mbtn_right_command | `cycle secondary-sid`                       |
+|                               | secondary_sub_track_wheel_down_command | `cycle secondary-sid`                       |
+|                               | secondary_sub_track_wheel_up_command   | `cycle secondary-sid down`                  |
 | Play/Pause button             | play_pause_mbtn_left_command     | `cycle pause`                                |
 |                               | play_pause_mbtn_mid_command      | `cycle-values loop-playlist inf no`          |
 |                               | play_pause_mbtn_right_command    | `cycle-values loop-file inf no`              |
