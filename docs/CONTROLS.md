@@ -68,7 +68,7 @@ Below is a list that explains the OSC buttons function depending on how you inte
 | Shift+left mouse click | Skips to the previous/next frame (and pauses)                           |
 | Middle mouse click     | Skips to the previous/next frame (and pauses)                           |
 
-### Audio/Subtitle
+### Audio/Subtitle/Secondary Subtitle
 
 | Action                 | Function                            |
 | ---------------------- | ----------------------------------- |

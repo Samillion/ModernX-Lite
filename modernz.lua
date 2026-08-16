@@ -89,6 +89,7 @@ local user_opts = {
 
     -- Buttons display and functionality
     subtitles_button = true,               -- show the subtitles menu button
+    secondary_subtitles_button = true,     -- show the secondary subtitles menu button
     audio_tracks_button = true,            -- show the audio tracks menu button
     jump_buttons = true,                   -- show the jump backward and forward buttons
     jump_amount = 10,                      -- change the jump amount in seconds
@@ -258,6 +259,13 @@ local user_opts = {
     sub_track_wheel_down_command = "cycle sub",
     sub_track_wheel_up_command = "cycle sub down",
 
+    -- secondary subtitle button mouse actions
+    secondary_sub_track_mbtn_left_command = "script-binding select/select-secondary-sid",
+    secondary_sub_track_mbtn_mid_command = "cycle secondary-sid down",
+    secondary_sub_track_mbtn_right_command = "cycle secondary-sid",
+    secondary_sub_track_wheel_down_command = "cycle secondary-sid",
+    secondary_sub_track_wheel_up_command = "cycle secondary-sid down",
+
     -- play/pause button mouse actions
     play_pause_mbtn_left_command = "cycle pause",
     play_pause_mbtn_mid_command = "cycle-values loop-playlist inf no",
@@ -358,6 +366,7 @@ local function build_icons(theme_name, style)
 
         audio        = o("surround_sound"),
         subtitle     = o("subtitles"),
+        secondary_subtitle = o("subtitles"),
         playlist     = o("playlist_play"),
         menu         = o("more_vert"),
         volume_mute  = o("no_sound"),
@@ -397,7 +406,9 @@ local language = {
         video = "Video",
         audio = "Audio",
         subtitle = "Subtitle",
+        secondary_subtitle = "Secondary Subtitle",
         no_subs = "No subtitles",
+        no_secondary_subs = "No secondary subtitles",
         no_audio = "No audio tracks",
         volume = "Volume",
         muted = "Muted",
@@ -1246,7 +1257,7 @@ local function prepare_elements()
                 element.layout.alpha[1] = 215
             end
             -- keep these to display tooltips
-            if not (element.name == "sub_track" or element.name == "audio_track" or element.name == "playlist") then
+            if not (element.name == "sub_track" or element.name == "secondary_sub_track" or element.name == "audio_track" or element.name == "playlist") then
                 element.eventresponder = nil
             end
         end
@@ -2281,6 +2292,7 @@ layouts["default"] = function ()
     if playlist_button then left_side_button("playlist", 550) end
     if audio_track and user_opts.audio_tracks_button then left_side_button("audio_track", 650) end
     if subtitle_track and user_opts.subtitles_button then left_side_button("sub_track", 750) end
+    if subtitle_track and user_opts.secondary_subtitles_button then left_side_button("secondary_sub_track", 850) end
 
     if audio_track and user_opts.volume_control then
         -- volume button
@@ -2621,6 +2633,7 @@ layouts["compact"] = function ()
     right_side_button("fullscreen", 300, user_opts.fullscreen_button)
     right_side_button("ontop", 400, user_opts.ontop_button and not (window_controls_enabled() and user_opts.ontop_in_topbar and state.ontop))
     right_side_button("sub_track", 500, user_opts.subtitles_button and state.sub_track_count > 0)
+    right_side_button("secondary_sub_track", 550, user_opts.secondary_subtitles_button and state.sub_track_count > 0)
     right_side_button("audio_track", 600, user_opts.audio_tracks_button and state.audio_track_count > 0)
     right_side_button("playlist", 300, user_opts.playlist_button)
     right_side_button("download", 800, state.is_url and user_opts.download_button)
@@ -2796,6 +2809,7 @@ layouts["mini"] = function ()
     right_side_button("fullscreen", 250, user_opts.fullscreen_button)
     right_side_button("ontop", 300, user_opts.ontop_button and not (window_controls_enabled() and user_opts.ontop_in_topbar and state.ontop))
     right_side_button("sub_track", 400, user_opts.subtitles_button and state.sub_track_count > 0)
+    right_side_button("secondary_sub_track", 450, user_opts.secondary_subtitles_button and state.sub_track_count > 0)
     right_side_button("audio_track", 500, user_opts.audio_tracks_button and state.audio_track_count > 0)
     right_side_button("playlist", 600, user_opts.playlist_button)
     right_side_button("download", 700, state.is_url and user_opts.download_button)
@@ -3285,6 +3299,15 @@ local function osc_init()
     ne.tooltipF = function () return track_tooltip(locale.subtitle, "sub", "sid", state.sub_track_count) end
     ne.nothingavailable = locale.no_subs
     bind_buttons("sub_track")
+
+    --secondary_sub_track
+    ne = new_element("secondary_sub_track", "button")
+    ne.enabled = state.sub_track_count > 0
+    ne.off = state.sub_track_count == 0 or not mp.get_property_native("secondary-sid")
+    ne.content = icons.secondary_subtitle
+    ne.tooltipF = function () return track_tooltip(locale.secondary_subtitle, "sub2", "secondary-sid", state.sub_track_count) end
+    ne.nothingavailable = locale.no_secondary_subs
+    bind_buttons("secondary_sub_track")
 
     -- vol_ctrl
     ne = new_element("vol_ctrl", "button")
