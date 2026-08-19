@@ -15,8 +15,10 @@ local function invoke_dialog(ps_command)
     local was_ontop = mp.get_property_native("ontop")
     if was_ontop then mp.set_property_native("ontop", false) end
 
+    local utf8_ps_command = "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; " .. ps_command
+
     local res = utils.subprocess({
-        args = { "powershell", "-NoProfile", "-STA", "-Command", ps_command },
+        args = { "powershell", "-NoProfile", "-STA", "-Command", utf8_ps_command },
         cancellable = false,
         capture_stdout = true,
         capture_stderr = true,
